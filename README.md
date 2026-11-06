@@ -6,4 +6,4 @@ Official website for **HACKANOVA 2026**, a 12-hour inter-college hackathon organ
 - **Where:** KNS Institute of Technology, Bengaluru
 - **Registration:** via Unstop (link coming soon)
 
-> Work in progress. The site is being built with React, Vite, Tailwind CSS, Three.js and GSAP, and will be deployed on Vercel.
+> Work in progress. The site is being built with React, Vite, Tailwind CSS, Three.js and GSAP, with Supabase for the organisers' admin page, and will be deployed on Cloudflare Pages.
