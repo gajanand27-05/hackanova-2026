@@ -1,1 +1,4 @@
 @import "tailwindcss";
+
+.badge-tbc { display:inline-block; padding:.15em .6em; border:1px dashed currentColor; border-radius:999px;
+  font: 600 .75em/1.6 var(--mono, ui-monospace, monospace); letter-spacing:.08em; text-transform:uppercase; opacity:.75 }
