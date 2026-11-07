@@ -55,3 +55,8 @@ test('sync keeps the device clock when the request fails', async () => {
   await clock.sync(async () => { throw new Error('offline') })
   expect(clock.now()).toBe(42)
 })
+
+test('test runner really applied the requested device timezone', () => {
+  const expected = { 'America/New_York': 300, 'Asia/Kolkata': -330 }[process.env.HN_TZ]
+  if (expected !== undefined) expect(new Date(START).getTimezoneOffset()).toBe(expected)
+})
