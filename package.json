@@ -1,0 +1,40 @@
+{
+  "name": "hackanova-2026",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:tz": "TZ=America/New_York vitest run && TZ=Asia/Kolkata vitest run",
+    "test:rls": "node --env-file=.env.test --test scripts/rls-test.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gajanand27-05/hackanova-2026.git"
+  },
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/gajanand27-05/hackanova-2026/issues"
+  },
+  "homepage": "https://github.com/gajanand27-05/hackanova-2026#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.119.0",
+    "gsap": "^3.15.1",
+    "lenis": "^1.3.27",
+    "lucide-react": "^1.70.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "@testing-library/jest-dom": "^7.0.1",
+    "@testing-library/react": "^16.3.3",
+    "@vitejs/plugin-react": "^6.2.1",
+    "jsdom": "^29.1.1",
+    "tailwindcss": "^4.3.5",
+    "vite": "^8.3.6",
+    "vitest": "^4.1.12"
+  },
+  "private": true
+}
