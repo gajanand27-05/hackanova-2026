@@ -5,7 +5,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:tz": "TZ=America/New_York vitest run && TZ=Asia/Kolkata vitest run",
+    "test:tz": "node scripts/test-tz.mjs",
     "test:rls": "node --env-file=.env.test --test scripts/rls-test.mjs"
   },
   "repository": {
