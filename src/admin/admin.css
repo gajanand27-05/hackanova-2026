@@ -1,0 +1,32 @@
+/* /admin: mobile-first, same palette, no 3D. 16px inputs stop iOS zoom; 44px tap targets. */
+.admin{--bg:#05060f;--fg:#eef1ff;--mute:#9aa3cf;--line:rgba(130,150,255,.22);--cyan:#2ee6f0;--hot:#ff4fd8;--violet:#9a5cff;
+  min-height:100vh;background:var(--bg);color:var(--fg);font:16px/1.5 Inter,system-ui,sans-serif;padding:16px;max-width:640px;margin:0 auto}
+.admin header{display:flex;align-items:center;gap:10px;flex-wrap:wrap;padding-bottom:12px;border-bottom:1px solid var(--line)}
+.admin header b{font:800 16px/1 Syne,system-ui,sans-serif;letter-spacing:.08em;margin-right:auto}
+.admin header span{font-size:13px;color:var(--mute)}
+.admin nav{display:flex;gap:6px;margin:14px 0;overflow-x:auto}
+.admin nav button[aria-selected="true"]{background:var(--cyan);color:#03040c;border-color:var(--cyan)}
+.admin h1{font:800 26px/1.2 Syne,system-ui,sans-serif;margin-bottom:16px}
+.admin h2{font:700 16px/1.2 Inter,sans-serif;margin:22px 0 10px;color:var(--mute)}
+.admin label{display:grid;gap:6px;margin:12px 0;font-weight:600}
+.admin label.check{display:flex;align-items:center;gap:10px;font-weight:500}
+.admin input,.admin textarea{font:16px/1.4 Inter,sans-serif;color:var(--fg);background:#0b0f26;border:1px solid var(--line);border-radius:10px;padding:12px;width:100%}
+.admin input[type="checkbox"]{width:22px;height:22px;accent-color:var(--hot)}
+.admin input:focus-visible,.admin textarea:focus-visible,.admin button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.admin button{min-height:44px;font:600 15px/1 Inter,sans-serif;color:var(--fg);background:#10153a;border:1px solid var(--line);border-radius:10px;padding:0 16px;cursor:pointer}
+.admin button.primary,.admin form>button{background:linear-gradient(100deg,var(--cyan),var(--violet));color:#03040c;border:0}
+.admin button:disabled{opacity:.45;cursor:not-allowed}
+.admin fieldset{border:1px solid var(--line);border-radius:12px;padding:12px;margin:12px 0;display:grid;gap:8px}
+.admin legend{padding:0 6px;color:var(--mute);font-size:14px}
+.admin .slot{display:grid;grid-template-columns:120px 1fr;gap:8px}
+.admin .row{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.admin .hint{font-size:13px;color:var(--mute)}
+.admin .err{color:#ff7a7a}
+.admin .status{margin-top:12px;padding:10px 12px;border-radius:10px;background:rgba(46,230,240,.08);border:1px solid rgba(46,230,240,.3)}
+.admin .live{color:var(--hot)}
+.admin .confirm{margin-top:12px;padding:14px;border:1px solid var(--hot);border-radius:12px;display:grid;gap:8px}
+.ann-list{list-style:none;display:grid;gap:8px}
+.ann-list li{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:10px}
+.ann-list li.urgent{border-color:var(--hot)}
+.ann-list time{font-size:12px;color:var(--mute)}
+.login{margin-top:12vh}
