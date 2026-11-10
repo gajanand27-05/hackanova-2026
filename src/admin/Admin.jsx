@@ -43,7 +43,7 @@ export default function Admin() {
         <span>{session.user.email}</span>
         <button onClick={() => client.auth.signOut()}>Log out</button>
       </header>
-      {isAdmin === false && <p className="err banner" role="alert">This account is logged in but is NOT on the admin list, so nothing you save will reach the site. Ask the developer to add {session.user.email}.</p>}
+      {isAdmin === false && <p className="err banner" role="alert">This account is logged in but is NOT on the admin list, so nothing you save will reach the site. To fix it, add {session.user.email} to public.admins in the Supabase SQL Editor.</p>}
       <nav role="tablist" aria-label="Admin sections">
         {TABS.map(([id, label]) => <button key={id} role="tab" aria-selected={tab === id} onClick={() => setTab(id)}>{label}</button>)}
       </nav>
