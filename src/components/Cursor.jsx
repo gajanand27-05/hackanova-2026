@@ -10,6 +10,7 @@ export function Cursor() {
     let x = innerWidth / 2, y = innerHeight / 2, tx = x, ty = y, raf = 0
     const move = e => {
       tx = e.clientX; ty = e.clientY
+      el.classList.add('on') // hidden until the mouse is actually used
       el.classList.toggle('grow', !!e.target.closest?.('a,button,[role="button"],.drow'))
     }
     const loop = () => {
@@ -17,8 +18,9 @@ export function Cursor() {
       el.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,-50%)`
       raf = requestAnimationFrame(loop)
     }
-    addEventListener('pointermove', move, { passive: true }); loop()
-    return () => { removeEventListener('pointermove', move); cancelAnimationFrame(raf) }
+    const leave = () => el.classList.remove('on')
+    addEventListener('pointermove', move, { passive: true }); document.addEventListener('pointerleave', leave); loop()
+    return () => { removeEventListener('pointermove', move); document.removeEventListener('pointerleave', leave); cancelAnimationFrame(raf) }
   }, [])
   return <div ref={ref} className="cursor" aria-hidden="true" style={{ display: 'none' }} />
 }

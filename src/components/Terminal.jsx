@@ -33,7 +33,7 @@ export function Terminal({ open, onClose, settings, now }) {
   }
   return (
     <div id="term" className={open ? 'open' : ''} role="dialog" aria-modal="false" aria-label="NOVA terminal"
-      aria-hidden={!open} inert={!open ? '' : undefined} onKeyDown={onKey}>
+      aria-hidden={!open} inert={!open} onKeyDown={onKey}>
       <div className="term-bar"><span>nova@hackanova:~ · tap a command or type <b style={{ color: 'var(--cyan)' }}>help</b></span>
         <button onClick={onClose} aria-label="Close terminal">close ✕</button></div>
       <div id="term-out" ref={out} aria-live="polite">{log.map(l => <div key={l.k} className={l.cls}>{l.text}</div>)}</div>
