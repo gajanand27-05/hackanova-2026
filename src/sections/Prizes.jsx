@@ -7,14 +7,15 @@ import { bus } from '../scene/bus.js'
 const ORDER = [2, 1, 3]
 const NAME = { 1: '1st', 2: '2nd', 3: '3rd' }
 
-// "₹??,???" flickers to random digits now and then until the pool is announced.
+// "₹??,???" glitches to random symbols now and then until the pool is announced.
 function usePoolFlicker(active) {
   const [txt, setTxt] = useState('??,???')
   useEffect(() => {
     if (!active || !motionAllowed()) return
     let t
     const id = setInterval(() => {
-      let s = ''; for (let i = 0; i < 5; i++) s += (Math.random() * 10) | 0
+      // symbols, never digits: a screenshot must not show a believable (fake) prize amount
+      const G = '#%&*@$!?'; let s = ''; for (let i = 0; i < 5; i++) s += G[(Math.random() * G.length) | 0]
       setTxt(s.slice(0, 2) + ',' + s.slice(2)); t = setTimeout(() => setTxt('??,???'), 260)
     }, 2200)
     return () => { clearInterval(id); clearTimeout(t) }
