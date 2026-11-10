@@ -1,8 +1,10 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { clock } from './lib/time.js'
 import { useNow } from './hooks/useNow.js'
 import { useLive, useSettings } from './hooks/useLive.js'
 import { AnnouncementStrip } from './components/AnnouncementStrip.jsx'
+import { Terminal } from './components/Terminal.jsx'
+import { isTypingTarget } from './lib/terminal.js'
 import { initSmooth } from './lib/smooth.js'
 import { motionAllowed, isFinePointer } from './lib/motion.js'
 import { bus } from './scene/bus.js'
@@ -40,11 +42,29 @@ function useButtonGlitch() {
   }, [])
 }
 
+// ` toggles the terminal; typing "nova" opens it. Ignored while typing in any field.
+function useTerminalShortcuts(setTerm) {
+  useEffect(() => {
+    let buf = ''
+    const onKey = e => {
+      if (e.ctrlKey || e.metaKey || e.altKey || isTypingTarget(document.activeElement)) return
+      if (e.key === '`') { e.preventDefault(); setTerm(t => !t); return }
+      if (e.key.length !== 1) return
+      buf = (buf + e.key.toLowerCase()).slice(-4)
+      if (buf === 'nova') { setTerm(true); buf = '' }
+    }
+    addEventListener('keydown', onKey)
+    return () => removeEventListener('keydown', onKey)
+  }, [setTerm])
+}
+
 export default function App() {
   const now = useNow()
   const live = useLive(now)
   const settings = useSettings(live.settings)
   const canvas = useRef(null)
+  const [term, setTerm] = useState(false)
+  useTerminalShortcuts(setTerm)
   useButtonGlitch()
 
   useEffect(() => { clock.sync() }, [])
@@ -84,7 +104,7 @@ export default function App() {
       <div className="grain" aria-hidden="true" />
       <div id="flash" aria-hidden="true" />
       <Cursor />
-      <Nav settings={settings} onTerminal={() => {}} />
+      <Nav settings={settings} onTerminal={() => setTerm(true)} />
       <AnnouncementStrip now={now} items={live.announcements} />
       <MotionPill />
       <main id="top">
@@ -101,7 +121,8 @@ export default function App() {
         <Faq />
         <Contact />
       </main>
-      <Footer settings={settings} onTerminal={() => {}} />
+      <Footer settings={settings} onTerminal={() => setTerm(true)} />
+      <Terminal open={term} onClose={() => setTerm(false)} settings={settings} now={now} />
     </>
   )
 }

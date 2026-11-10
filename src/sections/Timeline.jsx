@@ -2,13 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { ScrambleText } from '../components/ScrambleText.jsx'
-import { formatTimeIST, phaseAt, START, END } from '../lib/time.js'
+import { showTime, phaseAt, START, END } from '../lib/time.js'
 import { motionAllowed } from '../lib/motion.js'
 
 const ARC_D = 'M 50 300 Q 500 -150 950 300'
-const toIST = hhmm => formatTimeIST(Date.parse(`2026-11-26T${hhmm}:00+05:30`))
-export const showTime = t => !t ? null
-  : t.includes('–') ? t.split('–').map(toIST).join('–').replace(/ (AM|PM)–/, '–') : toIST(t)
 // quadratic Bézier fallback for environments without SVG geometry (tests); refined with getPointAtLength in the browser
 const bez = f => { const u = 1 - f; return { x: u * u * 50 + 2 * u * f * 500 + f * f * 950, y: u * u * 300 + 2 * u * f * -150 + f * f * 300 } }
 

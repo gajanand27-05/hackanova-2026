@@ -30,6 +30,11 @@ export function formatTimeIST(ms) {
   return IST.format(ms).replace(/\s+/g, ' ').toUpperCase()
 }
 
+// Schedule slot 'HH:MM' or 'HH:MM–HH:MM' (IST, 26 Nov) → '8:00 AM' / '6:00–8:00 PM'; null stays null.
+const slotIST = hhmm => formatTimeIST(Date.parse(`2026-11-26T${hhmm}:00+05:30`))
+export const showTime = t => !t ? null
+  : t.includes('–') ? t.split('–').map(slotIST).join('–').replace(/ (AM|PM)–/, '–') : slotIST(t)
+
 // Clock with device-skew correction (HTTP Date header, same origin) and a build-time-only fake time for rehearsals.
 export function createClock({ fakeNowISO, hostname = '', realNow = () => Date.now() } = {}) {
   const fakeBase = fakeNowISO && hostname !== PROD_HOST ? Date.parse(fakeNowISO) : NaN
