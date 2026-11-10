@@ -10,6 +10,9 @@ import { MotionPill } from './components/MotionPill.jsx'
 import { Nav } from './components/Nav.jsx'
 import { Hero } from './sections/Hero.jsx'
 import { About } from './sections/About.jsx'
+import { Domains } from './sections/Domains.jsx'
+import { Timeline } from './sections/Timeline.jsx'
+import { Prizes } from './sections/Prizes.jsx'
 
 const DEFAULT_SETTINGS = {
   unstopUrl: content.unstopUrl, registeredCount: content.registeredCount,
@@ -81,6 +84,9 @@ export default function App() {
       <main id="top">
         <Hero now={now} settings={settings} />
         <About />
+        <Domains />
+        <Timeline schedule={settings.schedule} now={now} />
+        <Prizes winners={[]} />
       </main>
     </>
   )
