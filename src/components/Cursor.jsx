@@ -15,7 +15,7 @@ export function Cursor() {
     }
     const loop = () => {
       x += (tx - x) * 0.18; y += (ty - y) * 0.18
-      el.style.transform = `translate3d(${x}px,${y}px,0) translate(-50%,-50%)`
+      el.style.transform = `translate3d(${x}px,${y}px,0)`
       raf = requestAnimationFrame(loop)
     }
     const leave = () => el.classList.remove('on')
