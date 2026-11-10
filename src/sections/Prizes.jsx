@@ -37,7 +37,7 @@ export function Prizes({ winners }) {
         <div className="card prize-card">
           {content.prizes.pool
             ? <div className="pool">{content.prizes.pool}</div>
-            : <div className="pool" aria-label="Prize pool announcing soon"><span className="cur" aria-hidden="true">₹</span><span aria-hidden="true">{pool}</span></div>}
+            : <div className="pool" aria-hidden="true"><span className="cur">₹</span><span>{pool}</span></div>}
           {!content.prizes.pool && <p className="pool-sub">Prize pool announcing soon</p>}
           <div className="podium">
             {ORDER.map(p => (
