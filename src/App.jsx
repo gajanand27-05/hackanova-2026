@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
-import { content } from './content.js'
+import { useEffect, useRef } from 'react'
 import { clock } from './lib/time.js'
 import { useNow } from './hooks/useNow.js'
+import { useLive, useSettings } from './hooks/useLive.js'
+import { AnnouncementStrip } from './components/AnnouncementStrip.jsx'
 import { initSmooth } from './lib/smooth.js'
 import { motionAllowed, isFinePointer } from './lib/motion.js'
 import { bus } from './scene/bus.js'
@@ -22,11 +23,6 @@ import { Faq } from './sections/Faq.jsx'
 import { Contact } from './sections/Contact.jsx'
 import { Footer } from './sections/Footer.jsx'
 
-const DEFAULT_SETTINGS = {
-  unstopUrl: content.unstopUrl, registeredCount: content.registeredCount,
-  registrationsClosed: content.registrationsClosed, schedule: content.schedule,
-}
-
 // Button hover glitch (C's effect), delegated so every .btn gets it.
 function useButtonGlitch() {
   useEffect(() => {
@@ -46,7 +42,8 @@ function useButtonGlitch() {
 
 export default function App() {
   const now = useNow()
-  const [settings] = useState(DEFAULT_SETTINGS) // Task 11 replaces this with useLive()
+  const live = useLive(now)
+  const settings = useSettings(live.settings)
   const canvas = useRef(null)
   useButtonGlitch()
 
@@ -88,13 +85,14 @@ export default function App() {
       <div id="flash" aria-hidden="true" />
       <Cursor />
       <Nav settings={settings} onTerminal={() => {}} />
+      <AnnouncementStrip now={now} items={live.announcements} />
       <MotionPill />
       <main id="top">
         <Hero now={now} settings={settings} />
         <About />
         <Domains />
         <Timeline schedule={settings.schedule} now={now} />
-        <Prizes winners={[]} />
+        <Prizes winners={live.winners} />
         <Perks />
         <Rules />
         <Judges />
