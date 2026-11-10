@@ -10,7 +10,7 @@ import { bus } from './bus.js'
 import { buildNet, fillFromNet, netLines } from './shapes.js'
 
 const VERT = /* glsl */`
-  uniform float uTime, uM, uCollapse, uFinal, uScatter, uPulse, uHot, uHotAmt, uSize, uPR;
+  uniform float uTime, uM, uCollapse, uFinal, uScatter, uPulse, uHot, uHotAmt, uSize, uPR, uHeroK;
   uniform vec3 uOffA, uOffB, uMouse;
   attribute vec3 aHero, aBurst, aConst, aArc, aTrophy, aColor;
   attribute float aRand, aClus;
@@ -52,10 +52,10 @@ const VERT = /* glsl */`
     float hc = (1. - step(.5, abs(aClus - uHot))) * uHotAmt * cl;
     vec4 mv = modelViewMatrix * vec4(p, 1.);
     gl_Position = projectionMatrix * mv;
-    gl_PointSize = uSize * (.35 + aRand * 1.1) * (1. + hot * 1.8 + uPulse * .6 + hc * 1.4) * uPR * (10. / max(.5, -mv.z));
+    gl_PointSize = uSize * mix(1., uHeroK, heroness) * (.35 + aRand * 1.1) * (1. + hot * 1.8 + uPulse * .6 + hc * 1.4) * uPR * (10. / max(.5, -mv.z));
     vColor = mix(aColor, vec3(1., .97, .92), clamp(hot * .85 + hc * .7, 0., 1.));
     float tw = .55 + .45 * sin(uTime * (1.5 + aRand * 3.) + aRand * 80.);
-    vAlpha = mix(tw, .95, clamp(heroness + hc, 0., 1.));
+    vAlpha = mix(tw, .95, clamp(heroness + hc, 0., 1.)) * mix(1., .55 + .45 * uHeroK, heroness);
   }`
 
 const FRAG = /* glsl */`
@@ -128,10 +128,13 @@ export function startScene(canvas, { mobile, reducedMotion }) {
     }
 
     /* hero: neural net */
-    let lineArr = new Float32Array(0)
+    let lineArr = new Float32Array(0), heroK = 1
     function buildHero() {
       const el = $('heroSlot'), r = el ? el.getBoundingClientRect() : { width: 200, height: 200 }
-      const net = buildNet(Math.max(40, Math.min(r.width, r.height) * 0.48) * pxW(), rnd)
+      const Rpx = Math.max(40, Math.min(r.width, r.height) * 0.48)
+      // a small net packs the same particles into less space: shrink and dim them so the structure stays visible
+      heroK = Math.min(1, Math.max(0.45, Rpx / 120))
+      const net = buildNet(Rpx * pxW(), rnd)
       fillFromNet(net, aHero, N, rnd)
       lineArr = netLines(net)
     }
@@ -275,7 +278,7 @@ export function startScene(canvas, { mobile, reducedMotion }) {
       uTime: { value: 0 }, uM: { value: 0 }, uCollapse: { value: 0 }, uFinal: { value: 1 }, uScatter: { value: 0 },
       uPulse: { value: 0 }, uHot: { value: -1 }, uHotAmt: { value: 0 },
       uOffA: { value: new THREE.Vector3() }, uOffB: { value: new THREE.Vector3() }, uMouse: { value: new THREE.Vector3(1e4, 1e4, 0.9) },
-      uSize: { value: mobile ? 3.6 : 3.0 }, uPR: { value: DPR },
+      uSize: { value: mobile ? 3.6 : 3.0 }, uPR: { value: DPR }, uHeroK: { value: 1 },
     }
     const mat = new THREE.ShaderMaterial({ uniforms, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, vertexShader: VERT, fragmentShader: FRAG })
     const points = new THREE.Points(geo, mat)
@@ -299,6 +302,7 @@ export function startScene(canvas, { mobile, reducedMotion }) {
 
     function buildAll() {
       buildHero()
+      uniforms.uHeroK.value = heroK
       lineGeo.setAttribute('position', new THREE.BufferAttribute(lineArr, 3))
       buildBurst(); buildConst(); buildArc(); buildTrophy(); computeFinal(); computeKeys()
       for (const k in A) A[k].needsUpdate = true

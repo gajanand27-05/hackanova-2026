@@ -352,7 +352,9 @@ nav.top{background:linear-gradient(rgba(3,4,12,.92),rgba(3,4,12,.72));backdrop-f
 /* short screens (e.g. 1366×768/800 laptops): tighten the hero so the countdown and CTAs fit */
 @media (max-height:860px){
   .hero{padding-top:84px}
-  .hero-slot{height:clamp(84px,15vh,170px);margin:8px auto 0}
+  .hero-slot{height:clamp(150px,22vh,210px);margin:6px auto 0}
+  .wordmark{font-size:min(6vw,92px)}
+  .tagline{font-size:clamp(16px,2vw,20px)}
   .wordmark{margin:4px auto 6px}
   .tagline{margin-top:10px}.meta{margin:12px 0 14px}.count{margin-bottom:14px}.count-label{margin-bottom:8px}
   .scroll-cue{display:none}
