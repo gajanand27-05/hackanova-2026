@@ -13,6 +13,14 @@ import { About } from './sections/About.jsx'
 import { Domains } from './sections/Domains.jsx'
 import { Timeline } from './sections/Timeline.jsx'
 import { Prizes } from './sections/Prizes.jsx'
+import { Perks } from './sections/Perks.jsx'
+import { Rules } from './sections/Rules.jsx'
+import { Judges } from './sections/Judges.jsx'
+import { Sponsors } from './sections/Sponsors.jsx'
+import { Venue } from './sections/Venue.jsx'
+import { Faq } from './sections/Faq.jsx'
+import { Contact } from './sections/Contact.jsx'
+import { Footer } from './sections/Footer.jsx'
 
 const DEFAULT_SETTINGS = {
   unstopUrl: content.unstopUrl, registeredCount: content.registeredCount,
@@ -87,7 +95,15 @@ export default function App() {
         <Domains />
         <Timeline schedule={settings.schedule} now={now} />
         <Prizes winners={[]} />
+        <Perks />
+        <Rules />
+        <Judges />
+        <Sponsors />
+        <Venue />
+        <Faq />
+        <Contact />
       </main>
+      <Footer settings={settings} onTerminal={() => {}} />
     </>
   )
 }
