@@ -13,6 +13,7 @@ export default function Admin() {
   const [session, setSession] = useState(undefined)
   const [tab, setTab] = useState('ann')
   const [err, setErr] = useState(null)
+  const [isAdmin, setIsAdmin] = useState(null)
 
   useEffect(() => {
     const m = document.createElement('meta'); m.name = 'robots'; m.content = 'noindex, nofollow'; document.head.append(m)
@@ -26,6 +27,11 @@ export default function Admin() {
     return () => { sub?.unsubscribe(); m.remove() }
   }, [])
 
+  useEffect(() => {
+    if (!client || !session) return setIsAdmin(null)
+    client.rpc('is_admin').then(({ data, error }) => setIsAdmin(error ? null : data === true))
+  }, [client, session])
+
   if (err) return <main className="admin"><p className="err">{err}</p></main>
   if (!client || session === undefined) return <main className="admin"><p>Loading…</p></main>
   if (!session) return <main className="admin"><Login client={client} /></main>
@@ -37,6 +43,7 @@ export default function Admin() {
         <span>{session.user.email}</span>
         <button onClick={() => client.auth.signOut()}>Log out</button>
       </header>
+      {isAdmin === false && <p className="err banner" role="alert">This account is logged in but is NOT on the admin list, so nothing you save will reach the site. Ask the developer to add {session.user.email}.</p>}
       <nav role="tablist" aria-label="Admin sections">
         {TABS.map(([id, label]) => <button key={id} role="tab" aria-selected={tab === id} onClick={() => setTab(id)}>{label}</button>)}
       </nav>

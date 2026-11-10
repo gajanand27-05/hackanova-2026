@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { content } from '../content.js'
+import { write } from './write.js'
 
 const OPEN = content.schedule.filter(e => !e.fixed)
 
@@ -16,14 +17,14 @@ export function QuickUpdatesTab({ client }) {
   async function save(e) {
     e.preventDefault()
     if (s.unstop_url && !s.unstop_url.startsWith('https://unstop.com/')) return setMsg('Link must start with https://unstop.com/')
-    const { error } = await client.from('site_settings').update({
+    const err = await write(client.from('site_settings').update({
       unstop_url: s.unstop_url || null,
       registered_count: s.registered_count === '' || s.registered_count == null ? null : Number(s.registered_count),
       registrations_closed: s.registrations_closed,
       schedule: s.schedule,
       updated_at: new Date().toISOString(),
-    }).eq('id', 1)
-    setMsg(error ? `Not saved: ${error.message}` : 'Saved. The site updates within seconds.')
+    }).eq('id', 1))
+    setMsg(err ?? 'Saved. The site updates within seconds.')
   }
   return (
     <form className="tab" onSubmit={save}>

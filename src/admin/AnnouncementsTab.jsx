@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { write } from './write.js'
 
 const MAX = 280
 
@@ -11,15 +12,15 @@ export function AnnouncementsTab({ client }) {
 
   async function post(e) {
     e.preventDefault(); setBusy(true)
-    const { error } = await client.from('announcements').insert({ body: body.trim(), level: urgent ? 'urgent' : 'normal' })
+    const err = await write(client.from('announcements').insert({ body: body.trim(), level: urgent ? 'urgent' : 'normal' }))
     setBusy(false)
-    if (error) return setMsg(`Not posted: ${error.message}`)
+    if (err) return setMsg(err.replace('Not saved', 'Not posted'))
     setBody(''); setUrgent(false); setMsg('Posted. It is live on the site.'); load()
   }
   async function remove(id) {
     if (!window.confirm('Delete this announcement from the site?')) return
-    const { error } = await client.from('announcements').delete().eq('id', id)
-    error ? setMsg(`Not deleted: ${error.message}`) : load()
+    const err = await write(client.from('announcements').delete().eq('id', id))
+    err ? setMsg(err.replace('Not saved', 'Not deleted')) : load()
   }
   const len = body.trim().length
   return (

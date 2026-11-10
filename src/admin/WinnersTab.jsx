@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { write } from './write.js'
 
 const EMPTY = [1, 2, 3].map(place => ({ place, team: '', project: '' }))
 const NAME = ['1st', '2nd', '3rd']
@@ -17,12 +18,12 @@ export function WinnersTab({ client }) {
   async function save() {
     const filled = rows.filter(r => r.team.trim()).map(r => ({ place: r.place, team: r.team.trim(), project: (r.project ?? '').trim() || null }))
     if (!filled.length) return setMsg('Enter at least one team name.')
-    const { error } = await client.from('winners').upsert(filled)
-    setMsg(error ? `Not saved: ${error.message}` : 'Saved privately. Not visible on the site until you publish.')
+    const err = await write(client.from('winners').upsert(filled))
+    setMsg(err ?? 'Saved privately. Not visible on the site until you publish.')
   }
   async function setPub(value) {
-    const { error } = await client.from('site_settings').update({ winners_published: value, updated_at: new Date().toISOString() }).eq('id', 1)
-    if (error) return setMsg(error.message)
+    const err = await write(client.from('site_settings').update({ winners_published: value, updated_at: new Date().toISOString() }).eq('id', 1))
+    if (err) { setConfirming(false); return setMsg(err) }
     setPublished(value); setConfirming(false); setMsg(value ? 'Published! Winners are live on the site.' : 'Unpublished. Winners are hidden again.')
   }
   return (

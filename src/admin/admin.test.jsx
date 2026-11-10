@@ -60,3 +60,16 @@ test('registrations-closed toggle is saved', async () => {
   fireEvent.click(screen.getByRole('button', { name: /save/i }))
   await waitFor(() => expect(c.tables.site_settings.update).toHaveBeenCalledWith(expect.objectContaining({ registrations_closed: true })))
 })
+
+test('a save that changes 0 rows (account not on the admin list) is reported, not shown as saved', async () => {
+  const blocked = (() => { const b = { select: () => b, eq: () => b, single: () => b, update: vi.fn(() => b),
+    then: (a, c) => Promise.resolve(b._r).then(a, c) }; return b })()
+  const row = { id: 1, unstop_url: null, registered_count: null, registrations_closed: false, schedule: {}, winners_published: false }
+  blocked._r = { data: row, error: null }
+  blocked.update = vi.fn(() => { blocked._r = { data: [], error: null }; return blocked })
+  render(<QuickUpdatesTab client={{ from: () => blocked }} />)
+  fireEvent.click(await screen.findByLabelText(/registrations closed/i))
+  fireEvent.click(screen.getByRole('button', { name: /save/i }))
+  expect(await screen.findByText(/not on the admin list/i)).toBeInTheDocument()
+  expect(screen.queryByText(/^saved/i)).toBeNull()
+})

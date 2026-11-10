@@ -30,3 +30,4 @@
 .ann-list li.urgent{border-color:var(--hot)}
 .ann-list time{font-size:12px;color:var(--mute)}
 .login{margin-top:12vh}
+.admin .banner{margin-top:12px;padding:12px;border:1px solid #ff7a7a;border-radius:10px;background:rgba(255,80,80,.08)}
